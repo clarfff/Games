@@ -180,7 +180,7 @@ class Asteroid{
         }
 };
 
-class Pulse: public Spaceship{
+class Pulse{
     public:
         int velocity;
         int position[2];
@@ -188,7 +188,7 @@ class Pulse: public Spaceship{
 
         Pulse()
         {
-            velocity = 500;
+            velocity = 250;
         }
 
         void setPosition(int x, int y)
@@ -228,7 +228,13 @@ int main()
     int xpt;
     int ypt;
     int hpt;
-    bool flag = false;
+    bool flag = 0;
+     //Define the array for space
+    char space[50][20];
+    // Define characters for each item
+    char spaceship2 = 'V';
+    char asteroid2 = 'X';
+    char laser = 'Q';
 
     string input;
 
@@ -254,6 +260,27 @@ int main()
         cout << "------- Spaceship Orientation -------" << endl << uno.getOrientation() << endl;
         //pulse1.track();
         i++;
+        // Populate the array with blank space characters
+        
+        for(int i = 0; i < 50; i++)
+        {
+            for(int j = 0; j < 20; j++)
+            {
+                space[i][j] = '-';
+            }
+        }
+        space[(int)(uno.getXPosition() *.001)][(int)(uno.getYPosition() *.001)] = spaceship2;
+        space[(int)(one.getXPosition()*.001)][(int)(one.getYPosition()*.001)] = asteroid2;
+    
+        for(int i = 0; i < 50; i++)
+        {
+            for(int j = 0; j < 20; j++)
+            {
+                cout << space[i][j];
+            }
+            cout << endl;
+        }
+
         cin >> input;
 
         if(input == "w" || input == "s")
@@ -265,12 +292,12 @@ int main()
             cout << "Orientation: " << uno.updateOrientation(input) << endl;
         }
 
-        if(input == " ")
+        if(input == "k")
         {
             pulse[j] = Pulse();
             pulse[j].setPosition(uno.getXPosition(), uno.getYPosition());
+            space[(int)(pulse[j].getXPosition()*.001)][(int)(pulse[j].getYPosition()*.001)] = laser;
             flag = true;
-            j++;
         }
 
         if(flag == 1)
@@ -287,6 +314,7 @@ int main()
                 one.setSize();
                 break;
             }
+            j++;
         }
         
         x = one.getXPosition() - uno.getXPosition();
@@ -308,4 +336,8 @@ int main()
             }
         }
     }
+    // loop that updates the array everytime something move
+    //for(int i = 0; i < spaceship.length; i++)
+    //{
+    //}
 }
