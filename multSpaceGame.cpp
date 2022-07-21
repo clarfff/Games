@@ -26,7 +26,8 @@ class Spaceship{
             lives = 3;
             orientation = rand() / double(RAND_MAX);
             orientation = 360 * orientation;
-            velocity = rand() % 99;
+            //velocity = rand() % 99;
+            velocity = 0;
             score = 0;
         }
 
@@ -139,7 +140,7 @@ class Asteroid{
             position[1] = rand() % 9999;
             orientation = rand() / double(RAND_MAX);
             orientation = 360 * orientation;
-            velocity = rand() % 9999;
+            velocity = rand() % 99;
             size = rand() % 9;
         }
 
@@ -188,7 +189,7 @@ class Pulse{
 
         Pulse()
         {
-            velocity = 250;
+            velocity = 150;
         }
 
         void setPosition(int x, int y)
@@ -228,9 +229,9 @@ int main()
     int xpt;
     int ypt;
     int hpt;
-    bool flag = 0;
+    bool flag = false;
      //Define the array for space
-    char space[50][20];
+    char space[20][50];
     // Define characters for each item
     char spaceship2 = 'V';
     char asteroid2 = 'X';
@@ -245,12 +246,13 @@ int main()
     cout << one.getXPosition() << "," << one.getYPosition() << endl << one.getOrientation() << endl;
     
     //Pulse pulse1 = Pulse();
-    Pulse pulse[10];
+    Pulse pulse[100];
+    pulse[0] = Pulse();
     //pulse1.setPosition(uno.getXPosition(), uno.getYPosition());
     //pulse1.setOrientation(uno.getOrientation());
     int i = 0;
     int j = 0;
-    while(i != 25)
+    while(true)
     {
         cout << "------- Spaceship ------" << endl << "Position: " << uno.getXPosition() << "," << uno.getYPosition() << endl;
         uno.setPosition();
@@ -262,19 +264,38 @@ int main()
         i++;
         // Populate the array with blank space characters
         
-        for(int i = 0; i < 50; i++)
+        for(int i = 0; i < 20; i++)
         {
-            for(int j = 0; j < 20; j++)
+            for(int j = 0; j < 50; j++)
             {
                 space[i][j] = '-';
             }
         }
         space[(int)(uno.getXPosition() *.001)][(int)(uno.getYPosition() *.001)] = spaceship2;
         space[(int)(one.getXPosition()*.001)][(int)(one.getYPosition()*.001)] = asteroid2;
-    
-        for(int i = 0; i < 50; i++)
+
+        if(flag == true)
         {
-            for(int j = 0; j < 20; j++)
+            space[(int)(pulse[j].getXPosition()*.001)][(int)(pulse[j].getYPosition()*.001)] = laser;
+            pulse[j].track();
+            xpt = one.getXPosition() - pulse[j].getXPosition();
+            ypt = one.getYPosition() - pulse[j].getYPosition();
+            hpt = xpt^2 + ypt^2;
+            hpt = sqrt(hpt);
+            if(hpt < one.getSize())
+            {
+                cout << "track: " << hpt << endl;
+                cout << "Asteroid Destroyed" << endl;
+                one.setSize();
+                break;
+            }
+
+            cout << "got here" << endl;
+        }
+    
+        for(int i = 0; i < 20; i++)
+        {
+            for(int j = 0; j < 50; j++)
             {
                 cout << space[i][j];
             }
@@ -291,30 +312,19 @@ int main()
         {
             cout << "Orientation: " << uno.updateOrientation(input) << endl;
         }
-
-        if(input == "k")
+        else if(input == "k")
         {
+            j++;
             pulse[j] = Pulse();
+            pulse[j].setOrientation(uno.getOrientation());
             pulse[j].setPosition(uno.getXPosition(), uno.getYPosition());
             space[(int)(pulse[j].getXPosition()*.001)][(int)(pulse[j].getYPosition()*.001)] = laser;
             flag = true;
+            cout << "shot" << endl;
         }
-
-        if(flag == 1)
+        else if(input == "stop")
         {
-            pulse[j].track();
-            xpt = one.getXPosition() - pulse[j].getXPosition();
-            ypt = one.getYPosition() - pulse[j].getYPosition();
-            hpt = xpt^2 + ypt^2;
-            hpt = sqrt(hpt);
-            if(hpt < one.getSize())
-            {
-                cout << "track: " << hpt << endl;
-                cout << "Asteroid Destroyed" << endl;
-                one.setSize();
-                break;
-            }
-            j++;
+            break;
         }
         
         x = one.getXPosition() - uno.getXPosition();
